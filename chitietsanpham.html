@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EDVANGARDE</title>
+    <link rel="shortcut icon" href="img/logoBK.png" />
+
+    <!-- Load font awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        crossorigin="anonymous">
+
+	<!-- owl carousel libraries cho hình nhỏ -->
+	<link rel="stylesheet" href="js/owlcarousel/owl.carousel.min.css">
+	<link rel="stylesheet" href="js/owlcarousel/owl.theme.default.min.css">
+	<script src="js/Jquery/Jquery.min.js"></script>
+    <script src="js/owlcarousel/owl.carousel.min.js"></script>
+<!-- ✅ Thêm CSS cho logo -->
+<style>
+    #chat-logo {
+      position: fixed;
+      bottom: 10px; /* trùng với JustChat */
+      right: 10px;
+      z-index: 10001; /* cao hơn JustChat */
+      cursor: pointer;
+      pointer-events: none;
+    }
+    
+    #chat-logo img {
+      width: 80px;
+      height: auto;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    
+        #chat-logo:hover img {
+          transform: rotate(15deg);
+        }
+    
+        #chat-logo::after {
+          content: "Nhấn để chat";
+          position: absolute;
+          right: 60px;
+          bottom: 10px;
+          background: #1E40AF;
+          color: white;
+          padding: 6px 10px;
+          border-radius: 8px;
+          font-size: 13px;
+          white-space: nowrap;
+          opacity: 0;
+          transition: opacity 0.3s;
+          pointer-events: none;
+        }
+    
+        #chat-logo:hover::after {
+          opacity: 1;
+        }
+</style>    
+    <!-- our files -->
+    <!-- css -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/topnav.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/taikhoan.css">
+    <link rel="stylesheet" href="css/trangchu.css">
+    <link rel="stylesheet" href="css/home_products.css">
+    <link rel="stylesheet" href="css/chitietsanpham.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <!-- js -->
+    <script src="data/products.js"></script>
+    <script src="js/classes.js"></script>
+    <script src="js/dungchung.js"></script>
+    <script src="js/chitietsanpham.js"></script>
+</head>
+
+<body>
+
+    <script> addTopNav(); </script>
+
+    <section>
+        <script> addHeader(); </script>
+
+        <div id="productNotFound" style="min-height: 50vh; text-align: center; margin: 50px; display: none;">
+            <h1 style="color: red; margin-bottom: 10px;">Không tìm thấy sản phẩm</h1>
+            <a href="index.html" style="text-decoration: underline;">Quay lại trang chủ</a>
+        </div>
+
+        <div class="chitietSanpham" style="margin-bottom: 100px">
+            <h1> </h1>
+            <div class="rating"></div>
+            <div class="rowdetail group">
+                <div class="picture">
+                    <img src="" onclick="opencertain()">
+                </div>
+                <div class="price_sale">
+                    <div class="area_price"> </div>
+                    <div class="ship" style="display: none;">
+                        <img src="img/chitietsanpham/clock-152067_960_720.png">
+                        <div>THỜI GIAN LÀ VÀNG</div>
+                    </div>
+                    <div class="area_promo">
+                        <strong>Lưu bút</strong>
+                        <div class="promo">
+                            <img src="img/chitietsanpham/icon-tick.png">
+                            <p>Mở trang sách – Mở tương lai.</p>
+                        </div>
+                    </div>
+                    <div class="policy">
+                        <div>
+                            <img src="img/chitietsanpham/box.png">
+                            <p>Mở trang sách – Mở tương lai.</p>
+                        </div>
+                        <div>
+                            <img src="img/chitietsanpham/icon-baohanh.png">
+                            <p>Mỗi ngày một trang – Mỗi năm một đời thay đổi.</p>
+                        </div>
+                        <div class="last">
+                            <img src="img/chitietsanpham/1-1.jpg">
+                            <p>Đọc đúng sách – Học đúng cách.</p>
+                        </div>
+                    </div>
+                    <div class="area_order">
+                        <!-- nameProduct là biến toàn cục được khởi tạo giá trị trong phanTich_URL_chiTietSanPham -->
+                        <a class="buy_now" onclick="themVaoGioHang(maProduct, nameProduct);">
+                            <b><i class="fa fa-cart-plus"></i> Tải sách</b>
+                        </a>
+                    </div>
+                </div>
+                <div class="info_product">
+                    <h2>Thông số</h2>
+                    <ul class="info">
+                    </ul>
+                </div>
+            </div>
+            <div id="overlaycertainimg" class="overlaycertainimg">
+                <div class="close" onclick="closecertain()">&times;</div>
+                <div class="overlaycertainimg-content">
+                    <img id="bigimg" class="bigimg" src="img/chitietsanpham/oppo-f9-red-2-400x460.png">
+                    <div class="div_smallimg owl-carousel">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="goiYSanPham"></div>
+    </section>
+
+    <script>addContainTaiKhoan();</script>
+
+    <div class="footer"><script>addFooter();</script></div>
+    <!-- ✅ Logo -->
+ <div id="chat-logo">
+    <img src="img/logochatbot.png" alt="Logo BKHN" />
+  </div>
+
+ 
+<!-- ✅ Script mới: dùng pointerEvents để tránh bị logo cản -->
+<script>
+    window.addEventListener("load", () => {
+      setInterval(() => {
+        const logo = document.getElementById("chat-logo");
+        logo.classList.add("shake");
+        setTimeout(() => logo.classList.remove("shake"), 500);
+      }, 6000);
+    });
+  </script>
+  
+
+    <script src="https://cdn.jsdelivr.net/npm/@kieng/just-chat/dist/just-chat.umd.js"
+    data-webhook-url="https://nhuan2000100.app.n8n.cloud/webhook/chat-agent"
+    data-theme-color="#1E40AF"
+    data-position="bottom-right"
+    data-title="XIN CHÀO"
+    data-welcome-message="Mình có thể giúp gì cho bạn hôm nay?"
+    data-history-enabled="true"
+    data-history-clear-button="true"
+    defer>
+  </script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+        const buyBtn = document.querySelector('.buy_now');
+        if (buyBtn) {
+            buyBtn.addEventListener('click', function () {
+                // Delay để chắc chắn hàm themVaoGioHang xử lý xong
+                setTimeout(() => {
+                    if (typeof sanPhamHienTai !== "undefined" && sanPhamHienTai.detail?.os) {
+                        window.open(sanPhamHienTai.detail.os, "_blank");
+                    } else {
+                        console.warn("Không có link sách để mở.");
+                    }
+                }, 200); // delay nhẹ để tránh đụng nhau
+            });
+        }
+    });
+</script>
+
+</body>
+
+</html>
