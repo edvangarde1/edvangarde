@@ -22,7 +22,7 @@ var list_products = [{
     },
     "masp": "App1"
 }, {
-    "name": "Giáo trình Tâm lý học nghề nghiệp (môn Tâm lý học ứng dụng)",
+    "name": "Giáo trình Tâm lý học nghề nghiệp",
     "company": "Apple",
     "img": "img/products/2.png",
     "price": "Free",
@@ -33,7 +33,7 @@ var list_products = [{
         "value": ""
     },
     "detail": {
-        "screen": "Giáo trình Tâm lý học nghề nghiệp (môn Tâm lý học ứng dụng)",
+        "screen": "Giáo trình Tâm lý học nghề nghiệp",
         "os": "https://tinyurl.com/287y8vy7",
         "camara": "Tâm lý học ứng dụng",
         "camaraFront": "ED3280",
