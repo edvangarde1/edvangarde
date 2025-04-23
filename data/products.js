@@ -334,7 +334,7 @@ var list_products = [{
     "masp": "App14"
 
 }, {
-    "name": "Slide bài giảng Giải tích 1 (MI1113) - thầy Phan Xuân Thành",
+    "name": "Slide bài giảng Giải tích 1 (MI1113)",
     "company": "Apple",
     "img": "img/products/15.png",
     "price": "Free",
@@ -345,7 +345,7 @@ var list_products = [{
         "value": "0"
     },
     "detail": {
-        "screen": "Slide bài giảng Giải tích 1 (MI1113) - thầy Phan Xuân Thành",
+        "screen": "Slide bài giảng Giải tích 1 (MI1113)",
         "os": "https://tinyurl.com/24wnqvbw",
         "camara": "Giải tích 1",
         "camaraFront": "MI1113",
