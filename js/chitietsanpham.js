@@ -1,247 +1,214 @@
-var nameProduct, maProduct, sanPhamHienTai; // Tên sản phẩm trong trang này, 
-// là biến toàn cục để có thể dùng ở bát cứ đâu trong trang
-// không cần tính toán lấy tên từ url nhiều lần
+<!DOCTYPE html>
+<html lang="vi">
 
-window.onload = function () {
-    khoiTao();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EDVANGARDE</title>
+    <link rel="shortcut icon" href="img/logoBK.png" />
 
-    // thêm tags (từ khóa) vào khung tìm kiếm
-    var tags = ["Giải tích", "Đại số", "Giáo trình", "Tuyển sinh Edtech"];
-    for (var t of tags) addTags(t, "index.html?search=" + t, true);
+    <!-- Load font awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        crossorigin="anonymous">
 
-    phanTich_URL_chiTietSanPham();
+	<!-- owl carousel libraries cho hình nhỏ -->
+	<link rel="stylesheet" href="js/owlcarousel/owl.carousel.min.css">
+	<link rel="stylesheet" href="js/owlcarousel/owl.theme.default.min.css">
+	<script src="js/Jquery/Jquery.min.js"></script>
+    <script src="js/owlcarousel/owl.carousel.min.js"></script>
 
-    // autocomplete cho khung tim kiem
-    autocomplete(document.getElementById('search-box'), list_products);
+    <!-- our files -->
+    <!-- css -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/topnav.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/taikhoan.css">
+    <link rel="stylesheet" href="css/trangchu.css">
+    <link rel="stylesheet" href="css/home_products.css">
+    <link rel="stylesheet" href="css/chitietsanpham.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <!-- js -->
+    <script src="data/products.js"></script>
+    <script src="js/classes.js"></script>
+    <script src="js/dungchung.js"></script>
+    <script src="js/chitietsanpham.js"></script>
+</head>
 
-    // Thêm gợi ý sản phẩm
-    sanPhamHienTai && suggestion();
-}
+<body>
 
-function khongTimThaySanPham() {
-    document.getElementById('productNotFound').style.display = 'block';
-    document.getElementsByClassName('chitietSanpham')[0].style.display = 'none';
-}
+    <script> addTopNav(); </script>
 
-function phanTich_URL_chiTietSanPham() {
-    nameProduct = new URLSearchParams(window.location.search).get("name");
-    if (!nameProduct) return khongTimThaySanPham();
-    nameProduct = decodeURIComponent(nameProduct);
+    <section>
+        <script> addHeader(); </script>
 
-    for(var p of list_products) {
-        if(nameProduct == p.name) {
-            maProduct = p.masp;
-            break;
-        }
-    }
+        <div id="productNotFound" style="min-height: 50vh; text-align: center; margin: 50px; display: none;">
+            <h1 style="color: red; margin-bottom: 10px;">Không tìm thấy sản phẩm</h1>
+            <a href="index.html" style="text-decoration: underline;">Quay lại trang chủ</a>
+        </div>
 
-    sanPhamHienTai = timKiemTheoMa(list_products, maProduct);
-    if(!sanPhamHienTai) return khongTimThaySanPham();
-
-    var divChiTiet = document.getElementsByClassName('chitietSanpham')[0];
-
-    // Đổi title
-    document.title = nameProduct + ' - EDVANGARDE';
-
-    // Cập nhật tên h1
-    var h1 = divChiTiet.getElementsByTagName('h1')[0];
-    h1.innerHTML += nameProduct;
-
-    // Cập nhật sao
-    var rating = "";
-    if (sanPhamHienTai.rateCount > 0) {
-        for (var i = 1; i <= 5; i++) {
-            if (i <= sanPhamHienTai.star) {
-                rating += `<i class="fa fa-star"></i>`
-            } else {
-                rating += `<i class="fa fa-star-o"></i>`
-            }
-        }
-        rating += `<span> ` + sanPhamHienTai.rateCount + ` đánh giá</span>`;
-    }
-    divChiTiet.getElementsByClassName('rating')[0].innerHTML += rating;
-
-    // Cập nhật giá + label khuyến mãi
-    var price = divChiTiet.getElementsByClassName('area_price')[0];
-    if (sanPhamHienTai.promo.name != 'giareonline') {
-        price.innerHTML = `<strong>` + sanPhamHienTai.price + `</strong>`;
-        price.innerHTML += new Promo(sanPhamHienTai.promo.name, sanPhamHienTai.promo.value).toWeb();
-    } else {
-        document.getElementsByClassName('ship')[0].style.display = ''; // hiển thị 'giao hàng trong 1 giờ'
-        price.innerHTML = `<strong>` + sanPhamHienTai.promo.value + `&#8363;</strong>
-					        <span>` + sanPhamHienTai.price + `&#8363;</span>`;
-    }
-
-
-
-    // Cập nhật thông số
-    var info = document.getElementsByClassName('info')[0];
-    var s = addThongSo('Sản phẩm', sanPhamHienTai.detail.screen);
-    s += addThongSo('Link sách', sanPhamHienTai.detail.os);
-    s += addThongSo('Học phần', sanPhamHienTai.detail.camara);
-    s += addThongSo('Mã học phần', sanPhamHienTai.detail.camaraFront);
-    s += addThongSo('Loại học phần', sanPhamHienTai.detail.cpu);
-    s += addThongSo('Nhà xuất bản', sanPhamHienTai.detail.ram);
-    s += addThongSo('Chủ biên', sanPhamHienTai.detail.rom);
-    s += addThongSo('Năm xuất bản', sanPhamHienTai.detail.microUSB);
-
-    info.innerHTML = s;
-
-    // Cập nhật hình
-    var hinh = divChiTiet.getElementsByClassName('picture')[0];
-    hinh = hinh.getElementsByTagName('img')[0];
-    hinh.src = sanPhamHienTai.img;
-    document.getElementById('bigimg').src = sanPhamHienTai.img;
-
-    
-    // Khởi động thư viện hỗ trợ banner - chỉ chạy sau khi tạo xong hình nhỏ
-    var owl = $('.owl-carousel');
-    owl.owlCarousel({
-        items: 5,
-        center: true,
-        smartSpeed: 450,
-    });
-}
-
-// Chi tiết khuyến mãi
-function getDetailPromo(sp) {
-    switch (sp.promo.name) {
-        case 'tragop':
-            var span = `<span style="font-weight: bold"> lãi suất ` + sp.promo.value + `% </span>`;
-            return `Khách hàng có thể mua trả góp sản phẩm với ` + span + `với thời hạn 6 tháng kể từ khi mua hàng.`;
-
-        case 'giamgia':
-            var span = `<span style="font-weight: bold">` + sp.promo.value + `</span>`;
-            return `Khách hàng sẽ được giảm ` + span + `₫ khi tới mua trực tiếp tại cửa hàng`;
-
-        case 'moiramat':
-            return `Khách hàng sẽ được thử máy miễn phí tại cửa hàng. Có thể đổi trả lỗi trong vòng 2 tháng.`;
-
-        case 'giareonline':
-            var del = stringToNum(sp.price) - stringToNum(sp.promo.value);
-            var span = `<span style="font-weight: bold">` + numToString(del) + `</span>`;
-            return `Sản phẩm sẽ được giảm ` + span + `₫ khi mua hàng online bằng thẻ VPBank hoặc tin nhắn SMS`;
-
-        default:
-            var span = `<span style="font-weight: bold">61 xe Wave Alpha</span>`;
-            return `Cơ hội trúng ` + span + ` khi trả góp Home Credit`;
-    }
-}
-
-function addThongSo(ten, giatri) {
-    return `<li>
-                <p>` + ten + `</p>
-                <div>` + giatri + `</div>
-            </li>`;
-}
-
-// add hình
-function addSmallImg(img) {
-    var newDiv = `<div class='item'>
-                        <a>
-                            <img src=` + img + ` onclick="changepic(this.src)">
+        <div class="chitietSanpham" style="margin-bottom: 100px">
+            <h1> </h1>
+            <div class="rating"></div>
+            <div class="rowdetail group">
+                <div class="picture">
+                    <img src="" onclick="opencertain()">
+                </div>
+                <div class="price_sale">
+                    <div class="area_price"> </div>
+                    <div class="ship" style="display: none;">
+                        <img src="img/chitietsanpham/clock-152067_960_720.png">
+                        <div>THỜI GIAN LÀ VÀNG</div>
+                    </div>
+                    <div class="area_promo">
+                        <strong>Lưu bút</strong>
+                        <div class="promo">
+                            <img src="img/chitietsanpham/icon-tick.png">
+                            <p>Mở trang sách – Mở tương lai.</p>
+                        </div>
+                    </div>
+                    <div class="policy">
+                        <div>
+                            <img src="img/chitietsanpham/box.png">
+                            <p>Mở trang sách – Mở tương lai.</p>
+                        </div>
+                        <div>
+                            <img src="img/chitietsanpham/icon-baohanh.png">
+                            <p>Mỗi ngày một trang – Mỗi năm một đời thay đổi.</p>
+                        </div>
+                        <div class="last">
+                            <img src="img/chitietsanpham/1-1.jpg">
+                            <p>Đọc đúng sách – Học đúng cách.</p>
+                        </div>
+                    </div>
+                    <div class="area_order">
+                        <!-- nameProduct là biến toàn cục được khởi tạo giá trị trong phanTich_URL_chiTietSanPham -->
+                        <a class="buy_now" onclick="themVaoGioHang(maProduct, nameProduct);">
+                            <b><i class="fa fa-cart-plus"></i> Tải sách</b>
                         </a>
-                    </div>`;
-    var banner = document.getElementsByClassName('owl-carousel')[0];
-    banner.innerHTML += newDiv;
-}
+                    </div>
+                </div>
+                <div class="info_product">
+                    <h2>Thông số</h2>
+                    <ul class="info">
+                    </ul>
+                </div>
+            </div>
+            <div id="overlaycertainimg" class="overlaycertainimg">
+                <div class="close" onclick="closecertain()">&times;</div>
+                <div class="overlaycertainimg-content">
+                    <img id="bigimg" class="bigimg" src="img/chitietsanpham/oppo-f9-red-2-400x460.png">
+                    <div class="div_smallimg owl-carousel">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
 
-// đóng mở xem hình
-function opencertain() {
-    document.getElementById("overlaycertainimg").style.transform = "scale(1)";
-}
+        <div id="goiYSanPham"></div>
+    </section>
 
-function closecertain() {
-    document.getElementById("overlaycertainimg").style.transform = "scale(0)";
-}
+    <script>addContainTaiKhoan();</script>
 
-// đổi hình trong chế độ xem hình
-function changepic(src) {
-    document.getElementById("bigimg").src = src;
-}
-
-// Thêm sản phẩm vào các khung sản phẩm
-function addKhungSanPham(list_sanpham, tenKhung, color, ele) {
-	// convert color to code
-	var gradient = `background-image: linear-gradient(120deg, ` + color[0] + ` 0%, ` + color[1] + ` 50%, ` + color[0] + ` 100%);`
-	var borderColor = `border-color: ` + color[0];
-	var borderA = `	border-left: 2px solid ` + color[0] + `;
-					border-right: 2px solid ` + color[0] + `;`;
-
-	// mở tag
-	var s = `<div class="khungSanPham" style="` + borderColor + `">
-				<h3 class="tenKhung" style="` + gradient + `">* ` + tenKhung + ` *</h3>
-				<div class="listSpTrongKhung flexContain">`;
-
-	for (var i = 0; i < list_sanpham.length; i++) {
-		s += addProduct(list_sanpham[i], null, true);
-		// truyền vào 'true' để trả về chuỗi rồi gán vào s
-	}
-
-	// thêm khung vào contain-khung
-	ele.innerHTML += s;
-}
-
-/// gợi ý sản phẩm
-function suggestion(){
-    // ====== Lay ra thong tin san pham hien tai ====== 
-    const giaSanPhamHienTai = stringToNum(sanPhamHienTai.price);
-
-    // ====== Tìm các sản phẩm tương tự theo tiêu chí ====== 
-    const sanPhamTuongTu = list_products
-    // Lọc sản phẩm trùng
-    .filter((_) => _.masp !== sanPhamHienTai.masp)
-    // Tính điểm cho từng sản phẩm
-    .map(sanPham => {
-        // Tiêu chí 1: giá sản phẩm ko lệch nhau quá 1 triệu
-        const giaSanPham = stringToNum(sanPham.price);
-        let giaTienGanGiong = Math.abs(giaSanPham - giaSanPhamHienTai) < 1000000;
-
-        // Tiêu chí 2: các thông số kỹ thuật giống nhau
-        let soLuongChiTietGiongNhau = 0;
-        for(let key in sanPham.detail) {
-            let value = sanPham.detail[key];
-            let currentValue = sanPhamHienTai.detail[key];
-
-            if(value == currentValue) soLuongChiTietGiongNhau++;
+    <div class="footer"><script>addFooter();</script></div>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+        const buyBtn = document.querySelector('.buy_now');
+        if (buyBtn) {
+            buyBtn.addEventListener('click', function () {
+                // Delay để chắc chắn hàm themVaoGioHang xử lý xong
+                setTimeout(() => {
+                    if (typeof sanPhamHienTai !== "undefined" && sanPhamHienTai.detail?.os) {
+                        window.open(sanPhamHienTai.detail.os, "_blank");
+                    } else {
+                        console.warn("Không có link sách để mở.");
+                    }
+                }, 200); // delay nhẹ để tránh đụng nhau
+            });
         }
-        let giongThongSoKyThuat  = soLuongChiTietGiongNhau >= 3;
-
-        // Tiêu chí 3: cùng hãng sản xuất 
-        let cungHangSanXuat = sanPham.company ===  sanPhamHienTai.company
-
-        // Tiêu chí 4: cùng loại khuyến mãi
-        let cungLoaiKhuyenMai = sanPham.promo?.name === sanPhamHienTai.promo?.name;
-        
-        // Tiêu chí 5: có đánh giá, số sao
-        let soDanhGia = Number.parseInt(sanPham.rateCount, 10)
-        let soSao = Number.parseInt(sanPham.star, 10);
-
-        // Tính điểm cho sản phẩm này (càng thoả nhiều tiêu chí điểm càng cao => càng nên gợi ý)
-        let diem = 0;
-        if(giaTienGanGiong) diem += 20;
-        if(giongThongSoKyThuat) diem += soLuongChiTietGiongNhau;
-        if(cungHangSanXuat) diem += 15;
-        if(cungLoaiKhuyenMai) diem += 10;
-        if(soDanhGia > 0) diem += (soDanhGia + '').length;
-        diem += soSao;
-
-        // Thêm thuộc tính diem vào dữ liệu trả về
-        return {
-            ...sanPham,
-            diem: diem
-        };
-    })
-    // Sắp xếp theo số điểm cao xuống thấp
-    .sort((a,b) => b.diem - a.diem)
-    // Lấy ra 10 sản phẩm đầu tiên
-    .slice(0, 10);
-
-    console.log(sanPhamTuongTu)
-
-    // ====== Hiển thị 5 sản phẩm lên web ====== 
-    if(sanPhamTuongTu.length) {
-        let div = document.getElementById('goiYSanPham');
-        addKhungSanPham(sanPhamTuongTu, 'Bạn có thể thích', ['#434aa8', '#ec1f1f'], div);
+    });
+</script>
+<style>
+    #goto-top-page {
+        position: fixed; /* để nó "dính" vào góc màn hình */
+        bottom: 20px;    /* cách đáy 20px */
+        left: 8px;     /* cách lề trái20px */
+        font-size: 30px; /* chỉnh kích thước icon nếu muốn */
+        cursor: pointer; /* đổi con trỏ khi hover */
     }
-}
+    </style>
+    
+    <i class="fa fa-arrow-up" id="goto-top-page" onclick="gotoTop()"></i>
+    <script>
+        if (window.innerWidth >= 1440) {
+          document.body.style.zoom = "115%";
+        }
+      </script>
+<script type="module" defer>
+    import Chatbot from "https://edvangarde1.github.io/chatbot/updated_embed.js";
+    Chatbot.init({
+      "n8nChatUrl": "https://nhuan99.app.n8n.cloud/webhook/4eaf2e3a-2316-4e3a-ada4-ed8706f06238/chat",
+      "theme": {
+        "button": {
+          "backgroundColor": "#111173",
+          "right": 5,
+          "bottom": 15,
+          "size": 65,
+          "iconColor": "#FFFFFF",
+          "customIconSrc": "img/logochatbot.png",
+          "autoWindowOpen": {
+            "autoOpen": true,
+            "openDelay": 3600
+          }
+        },
+        "tooltip": {
+          "showTooltip": true,
+          "tooltipMessage": "",
+          "tooltipBackgroundColor": "#F0F0F9",
+          "tooltipTextColor": "#1c1c1c",
+          "tooltipFontSize": 14
+        },
+        "chatWindow": {
+          "showTitle": true,
+          "title": "EDVANGARDE AGENT",
+          "titleAvatarSrc": "img/logochatbot.png",
+          "welcomeMessage": "Chào bạn, bạn đang cần tìm gì ạ?",
+          "errorMessage": "This is a custom error message",
+          "backgroundColor": "#ffffff",
+          "height": 609,
+          "width": 500,
+          "fontSize": 15,
+          "starterPrompts": [
+            "Tôi cần Bài giảng Đại số",
+            "Tôi cần Giáo trình PLĐC"
+          ],
+          "starterPromptFontSize": 14,
+          "clearChatOnReload": false,
+          "botMessage": {
+            "backgroundColor": "#F0F0F9",
+            "textColor": "#050505",
+            "showAvatar": true,
+            "avatarSrc": "img/logochatbot.png"
+          },
+          "userMessage": {
+            "backgroundColor": "#F0F0F9",
+            "textColor": "#050505",
+            "showAvatar": true,
+            "avatarSrc": "https://www.svgrepo.com/show/339963/chat-bot.svg"
+          },
+          "textInput": {
+            "placeholder": "Type your query",
+            "backgroundColor": "#ffffff",
+            "textColor": "#1e1e1f",
+            "sendButtonColor": "#111173",
+            "maxChars": 100,
+            "maxCharsWarningMessage": "Bạn đã vượt quá giới hạn ký tự. Vui lòng nhập ít hơn 100 ký tự.",
+            "autoFocus": false
+          }
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
