@@ -13,7 +13,7 @@ window.onload = function () {
 	var owl = $('.owl-carousel');
 	owl.owlCarousel({
 		items: 1.5,
-		margin: 100,
+		margin: 20,
 		center: true,
 		loop: true,
 		smartSpeed: 450,
